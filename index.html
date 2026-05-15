@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Export: Kelas XII DKV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        .font-sans { font-family: 'Outfit', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-tech { font-family: 'Space Grotesk', sans-serif; }
+        .font-handwriting { font-family: 'Caveat', cursive; }
+
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .btn-creative {
+            position: relative;
+            background: linear-gradient(45deg, #ec4899, #8b5cf6);
+            background-size: 200% auto;
+            color: white;
+            transition: 0.5s;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .btn-creative:hover {
+            background-position: right center;
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-creative::before {
+            content: '';
+            position: absolute;
+            top: 1px; right: 1px; bottom: 1px; left: 1px;
+            background: #111827; /* Dark background inside */
+            border-radius: 4px;
+            z-index: -1;
+            transition: 0.4s;
+        }
+        .btn-creative:hover::before {
+            opacity: 0; /* Reveal gradient on hover */
+        }
+
+        .light-leak-active {
+            animation: lightLeak 1.5s ease-in-out forwards;
+        }
+        @keyframes lightLeak {
+            0% { filter: brightness(1) contrast(1) sepia(0); opacity: 1; transform: scale(1); }
+            50% { filter: brightness(3) contrast(1.5) sepia(1) hue-rotate(320deg); opacity: 1; transform: scale(1.02); background-color: #fff; }
+            100% { filter: brightness(1) contrast(1) sepia(0); opacity: 0; display: none; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        .bg-mesh {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 80% 0%, hsla(285,65%,45%,0.3) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(333,70%,50%,0.3) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(220,80%,55%,0.3) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, hsla(343,100%,76%,0.2) 0px, transparent 50%);
+            background-size: 200% 200%;
+            animation: moveGradient 15s ease infinite alternate;
+        }
+        @keyframes moveGradient {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .photo-frame {
+            background: #fff;
+            padding: 10px 10px 35px 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.1) brightness(0.9);
+            transition: all 0.5s ease;
+        }
+        .photo-frame:hover {
+            transform: scale(1.15) rotate(0deg) !important;
+            z-index: 50;
+            box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+        }
+        .photo-frame:hover img {
+            filter: contrast(1) brightness(1);
+        }
+
+        ::-webkit-scrollbar { display: none; }
+        
+        /* Highlight text for DKV */
+        .text-gradient {
+            background: linear-gradient(to right, #f472b6, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Adobe UI Specific Styles */
+        .adobe-panel { background-color: #252526; border-color: #333333; }
+        .adobe-header { background-color: #323233; }
+        .adobe-input { background-color: #1e1e1e; border: 1px solid #333; }
+    </style>
+</head>
+<body id="main-body" class="bg-gray-900 text-gray-200 font-sans min-h-screen w-full overflow-x-hidden relative transition-colors duration-1000">
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="musik_perpisahan.mp3" type="audio/mpeg">
+    </audio>
+
+    <canvas id="designCanvas" class="fixed inset-0 z-0 opacity-0 transition-opacity duration-2000"></canvas>
+    
+    <!-- Flash Overlay (Untuk Transisi Cahaya) -->
+    <div id="flash-overlay" class="fixed inset-0 z-40 bg-white pointer-events-none opacity-0 hidden"></div>
+
+    <div id="scene-render" class="z-20 w-full max-w-4xl p-4 sm:p-6 md:p-10 flex flex-col justify-center min-h-screen mx-auto relative cursor-pointer font-sans">
+        <div class="bg-[#1e1e1e] rounded-lg shadow-2xl border border-[#333] overflow-hidden flex flex-col">
+            <!-- Mac OS window style header / Adobe Media Encoder -->
+            <div class="w-full h-8 adobe-header flex items-center px-4 border-b border-[#222]">
+                <div class="flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                    <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                    <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                </div>
+                <div class="mx-auto text-[#ccc] text-xs font-semibold tracking-wide">Adobe Media Encoder 2026</div>
+            </div>
+            
+            <div class="p-4 sm:p-6 flex flex-col md:flex-row gap-6 relative">
+                <div id="skip-hint" class="absolute top-2 right-4 text-gray-500 text-[10px] animate-pulse">
+                    [ Ketuk layar untuk Skip ]
+                </div>
+
+                <!-- Left: Video Preview -->
+                <div class="w-full md:w-5/12">
+                    <div class="bg-black aspect-video rounded border border-[#444] relative overflow-hidden shadow-inner flex items-center justify-center">
+                        <canvas id="preview-canvas" class="absolute inset-0 w-full h-full"></canvas>
+                        <!-- Overlays -->
+                        <div class="absolute top-2 left-2 text-[10px] text-white/80 font-mono drop-shadow-md z-10 flex items-center gap-1">
+                            <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div> REC
+                        </div>
+                        <div class="absolute bottom-2 right-2 text-[10px] text-white/80 font-mono drop-shadow-md z-10" id="preview-time">00:00:00:00</div>
+                        <!-- Safe margins guide -->
+                        <div class="absolute inset-[10%] border border-white/20 pointer-events-none z-10"></div>
+                        <div class="absolute inset-[20%] border border-white/10 pointer-events-none z-10"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Info & Progress -->
+                <div class="w-full md:w-7/12 flex flex-col justify-center">
+                    <div class="mb-4">
+                        <h2 class="text-[#e0e0e0] font-bold text-sm sm:text-base break-all">Masa_SMK_Final_Fix_Bismillah_ACC.mp4</h2>
+                        <p class="text-[#888] text-[11px] mt-1">Format: H.264 | Preset: High Quality Kedewasaan 4K</p>
+                        <p class="text-[#888] text-[11px]">Output: C:\Users\DKV\Memories\2026\...</p>
+                    </div>
+
+                    <!-- Logs -->
+                    <div class="adobe-input rounded p-2 mb-4 h-28 overflow-hidden relative">
+                        <div id="render-content" class="text-[10px] sm:text-xs font-mono text-[#00ff00] opacity-80 flex flex-col justify-end min-h-full gap-1">
+                            <!-- logs generated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar Area -->
+                    <div>
+                        <div class="flex justify-between text-[11px] text-[#ccc] mb-1">
+                            <span id="render-status" class="font-semibold text-blue-400">Rendering...</span>
+                            <span id="render-percentage" class="font-mono">0%</span>
+                        </div>
+                        <div class="w-full h-3 adobe-input rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-600 to-blue-400 w-0"></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-[#888] mt-1 font-mono">
+                            <span id="time-elapsed">Elapsed: 00:00:00</span>
+                            <span id="time-remaining">Remaining: 00:00:12</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Button -->
+            <div id="action-container" class="adobe-panel border-t p-4 flex justify-end opacity-0 hidden transition-opacity duration-500">
+                <button id="btn-export" class="bg-blue-600 hover:bg-blue-500 text-white font-sans px-6 py-2 rounded text-xs sm:text-sm font-semibold transition-colors flex items-center gap-2 shadow-lg focus:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Play Masterpiece
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-letter" class="z-10 w-full min-h-screen hidden flex-col items-center justify-center p-4 sm:p-8 py-12 mx-auto relative">
+        <div class="glass-card max-w-4xl w-full p-6 sm:p-10 md:p-16 rounded-3xl text-center md:text-left opacity-0 transform scale-95 translate-y-10 transition-all duration-1000 ease-out border border-white/10" id="letter-card">
+            
+            <div class="flex justify-between items-center mb-8">
+                <div class="hidden md:flex gap-2">
+                    <span class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-tech font-medium border border-pink-500/30">CMYK</span>
+                    <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-tech font-medium border border-blue-500/30">1920x1080</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-tech font-medium border border-purple-500/30">60fps</span>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-500 to-yellow-500 p-[2px] mx-auto md:mx-0 animate-spin-slow" style="animation: spin 8s linear infinite;">
+                    <div class="w-full h-full bg-gray-900 rounded-full flex items-center justify-center">
+                        <div class="w-4 h-4 rounded-full bg-white"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl text-white font-bold mb-8 tracking-wide text-center">
+                Untuk Anak-anakku<br><span class="text-gradient mt-2 block pb-2">Kelas XII DKV</span>
+            </h1>
+            
+            <div class="font-sans text-gray-200 text-sm sm:text-base lg:text-lg space-y-5 md:space-y-6 leading-relaxed relative" id="letter-content">
+                <div class="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-pink-500 via-purple-500 to-blue-500 rounded-full opacity-50 hidden md:block -ml-6"></div>
+
+                <p class="opacity-0 paragraph transform translate-x-4">Tiga tahun berlalu lebih cepat dari <i>shutter speed</i> kamera kalian saat memotret diam-diam teman yang sedang tidur di kelas. Rasanya baru kemarin Bapak melihat kalian panik karena <b>lupa menekan tombol <i>'Record'</i></b> saat liputan acara, atau menangis menatap layar karena laptop mendadak <i>Not Responding</i> saat Photoshop sedang memproses <i>Healing Brush</i> berukuran raksasa.</p>
+                
+                <p class="opacity-0 paragraph transform translate-x-4">Kita melewati banyak drama beresolusi tinggi bersama. Dari <i>SD Card</i> yang mendadak <i>corrupt</i> sebelum tugas dikumpul, <i>framing</i> video yang miring, ISO yang terlalu memaksakan sampai wajah penuh <i>noise</i>, hingga perdebatan panjang yang selalu berujung pada alasan sakti: <span class="font-tech text-yellow-300 bg-white/10 px-2 py-0.5 rounded">"Maaf Pak, file Premiere saya nge-crash."</span></p>
+                
+                <p class="opacity-0 paragraph transform translate-x-4">Hari ini, <i>timeline</i> putih abu-abu kalian telah selesai di-<i>render</i>. Tidak ada lagi revisi <i>Color Grading</i> dari sekolah. Kalian sudah berhasil menghapus <i>background</i> rasa malas kalian menggunakan <i>Magic Wand Tool</i>, dan kini bersiap di-<i>export</i> ke dunia nyata menjadi versi dengan resolusi tertinggi dari diri kalian sendiri.</p>
+                
+                <p class="opacity-0 paragraph transform translate-x-4">Di luar sana, dunia adalah kanvas kosong dan <i>sequence</i> tanpa batas. Jadilah fotografer yang peka menangkap momen kehidupan, videografer yang mampu merangkai cerita penuh makna, dan desainer yang mewarnai dunia. Dan ingat, jika nanti kalian lelah, jangan lupa mengambil jeda. Hidup ini butuh <i>Exposure</i> yang seimbang; tidak perlu selalu memaksa untuk terus terang benderang.</p>
+                
+                <p class="opacity-0 paragraph transform translate-x-4 text-white font-medium">Dari sekian banyak <i>footage</i> video dan jepretan foto yang pernah kalian ambil, memori tentang kalianlah yang paling berharga di galeri hati Bapak. Teruslah berkarya, <i>Masterpiece</i>-ku. <i>Frame</i> kita di sekolah ini mungkin selesai, tapi karya agung kalian baru saja dimulai.</p>
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center opacity-0 paragraph">
+                <div class="text-center md:text-left mb-6 md:mb-0">
+                    <p class="font-handwriting text-white text-3xl sm:text-4xl">Semoga sukses selalu,</p>
+                    <p class="font-sans text-gray-400 text-xs sm:text-sm mt-2 tracking-wider uppercase font-semibold">Muhamad Untung Setiawan</p>
+                </div>
+                <div class="bg-black/40 px-4 py-2 rounded border border-white/5 shadow-inner text-right">
+                    <p class="font-tech text-gray-400 text-xs">Layer Count: <span class="text-yellow-400">Tak Terhingga</span></p>
+                    <p class="font-tech text-gray-400 text-xs mt-1">Coffee Consumed: <span class="text-pink-400">999+ Cups</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- SCENE 1: RENDER ENGINE SIMULATION ---
+        const renderLogs = [
+            { p: 5, text: "[INIT] Membuka project Masa_SMK_Final_Lulus_Amin.prproj..." },
+            { p: 15, text: "[IMPORT] Mengimpor file RAW: tawa, tangis, dan drama kelompok..." },
+            { p: 25, text: "[COLOR GRADE] Memperbaiki White Balance pada hari-hari gelap penuh revisi..." },
+            { p: 40, text: "[PHOTOSHOP] Menghapus rasa takut menggunakan Magic Eraser Tool..." },
+            { p: 55, text: "[AUDIO] Sync suara jepretan kamera dengan detak jantung saat presentasi..." },
+            { p: 70, text: "[VFX] Menambahkan keyframe pada kedewasaan (Ease In -> Ease Out)..." },
+            { p: 85, text: "[WARN] Disk Space Full: Terlalu banyak kenangan indah yang tak bisa dihapus." },
+            { p: 95, text: "[SYS] Mengompresi 3 tahun kebersamaan menjadi memori abadi..." }
+        ];
+
+        let renderProgress = 0;
+        let isSkipped = false;
+        let renderInterval;
+        let frameCount = 0;
+        
+        const progressBar = document.getElementById('progress-bar');
+        const percentageText = document.getElementById('render-percentage');
+        const statusText = document.getElementById('render-status');
+        const renderContent = document.getElementById('render-content');
+        const timeElapsedEl = document.getElementById('time-elapsed');
+        const timeRemainingEl = document.getElementById('time-remaining');
+        const actionContainer = document.getElementById('action-container');
+        const previewCanvas = document.getElementById('preview-canvas');
+        const previewTime = document.getElementById('preview-time');
+
+        // Menggambar grafik abstrak untuk simulasi video
+        function drawPreviewFrame() {
+            if(!previewCanvas) return;
+            const pCtx = previewCanvas.getContext('2d');
+            const w = previewCanvas.width;
+            const h = previewCanvas.height;
+            
+            // Background warna-warni yang berubah seiring waktu
+            pCtx.fillStyle = `hsl(${(frameCount % 360)}, 60%, ${Math.random() * 15 + 10}%)`;
+            pCtx.fillRect(0, 0, w, h);
+            
+            // Lingkaran meluas (Motion Graphics)
+            pCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            pCtx.lineWidth = 2;
+            pCtx.beginPath();
+            pCtx.arc(w/2, h/2, (frameCount * 3) % (w), 0, Math.PI*2);
+            pCtx.stroke();
+
+            // Efek Noise / Film Grain
+            for(let i=0; i<150; i++) {
+                pCtx.fillStyle = `rgba(255,255,255,${Math.random()*0.15})`;
+                pCtx.fillRect(Math.random()*w, Math.random()*h, 2, 2);
+            }
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `00:${m}:${s}`;
+        }
+
+        function finishRender() {
+            renderProgress = 100;
+            progressBar.style.width = '100%';
+            percentageText.innerText = '100%';
+            statusText.innerText = 'Render Ready.';
+            statusText.classList.replace('text-blue-400', 'text-green-400');
+            timeRemainingEl.innerText = 'Remaining: 00:00:00';
+            
+            const skipHint = document.getElementById('skip-hint');
+            if(skipHint) skipHint.style.display = 'none';
+            
+            renderContent.innerHTML += `<div class="mt-1 text-green-400 font-bold">> [SUCCESS] Render Complete. Siap diekspor ke Dunia Nyata.</div>`;
+            renderContent.scrollTop = renderContent.scrollHeight;
+
+            // Pastikan preview frame terakhir digambar jika di-skip
+            if(previewCanvas) {
+                previewCanvas.width = previewCanvas.offsetWidth || 300;
+                previewCanvas.height = previewCanvas.offsetHeight || 150;
+                drawPreviewFrame();
+            }
+
+            setTimeout(() => {
+                actionContainer.classList.remove('hidden');
+                setTimeout(() => actionContainer.style.opacity = 1, 50);
+            }, 300);
+        }
+
+        function startRender() {
+            if(previewCanvas) {
+                previewCanvas.width = previewCanvas.offsetWidth;
+                previewCanvas.height = previewCanvas.offsetHeight;
+            }
+
+            const totalDuration = 12; // Animasi render selama 12 detik
+            const fps = 30;
+            const totalFrames = totalDuration * fps;
+            let currentLogIndex = 0;
+
+            renderInterval = setInterval(() => {
+                if(isSkipped) {
+                    clearInterval(renderInterval);
+                    return;
+                }
+
+                frameCount++;
+                renderProgress = (frameCount / totalFrames) * 100;
+
+                if (renderProgress >= 100) {
+                    clearInterval(renderInterval);
+                    finishRender();
+                    return;
+                }
+
+                // Update UI Progress
+                progressBar.style.width = `${renderProgress}%`;
+                percentageText.innerText = `${Math.floor(renderProgress)}%`;
+                
+                // Update Estimasi Waktu
+                const elapsedSec = frameCount / fps;
+                const remainingSec = totalDuration - elapsedSec;
+                timeElapsedEl.innerText = `Elapsed: ${formatTime(elapsedSec)}`;
+                timeRemainingEl.innerText = `Remaining: ${formatTime(remainingSec)}`;
+
+                // Update Timecode di Preview Video
+                const tcM = Math.floor(elapsedSec / 60).toString().padStart(2,'0');
+                const tcS = Math.floor(elapsedSec % 60).toString().padStart(2,'0');
+                const tcF = Math.floor(frameCount % fps).toString().padStart(2,'0');
+                if(previewTime) previewTime.innerText = `00:${tcM}:${tcS}:${tcF}`;
+                
+                drawPreviewFrame();
+
+                // Memunculkan text log sesuai persentase
+                if(currentLogIndex < renderLogs.length && renderProgress >= renderLogs[currentLogIndex].p) {
+                    renderContent.innerHTML += `<div>> ${renderLogs[currentLogIndex].text}</div>`;
+                    renderContent.scrollTop = renderContent.scrollHeight;
+                    currentLogIndex++;
+                }
+
+            }, 1000 / fps);
+        }
+
+        // FUNGSI SKIP
+        document.getElementById('scene-render').addEventListener('click', function(e) {
+            if (e.target.id === 'btn-export' || e.target.closest('#btn-export')) return;
+            
+            if (!isSkipped) {
+                isSkipped = true;
+                clearInterval(renderInterval);
+                finishRender();
+            }
+        });
+
+        // Mulai render setelah sedikit jeda
+        setTimeout(startRender, 600);
+
+        // --- STREAMING_CHUNK: TRANSISI & ANIMASI (Light Leak) ---
+        const btnExport = document.getElementById('btn-export');
+        const mainBody = document.getElementById('main-body');
+        const bgMusic = document.getElementById('bg-music');
+        const flashOverlay = document.getElementById('flash-overlay');
+
+        btnExport.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+
+            // Putar musik
+            bgMusic.volume = 0.7;
+            bgMusic.play().catch(e => console.log("Gagal memutar audio:", e));
+
+            // Trigger Flash / Light Leak
+            flashOverlay.classList.remove('hidden');
+            flashOverlay.classList.add('light-leak-active');
+
+            setTimeout(() => {
+                // Sembunyikan layar render
+                document.getElementById('scene-render').style.display = 'none';
+                
+                // Ubah background jadi Mesh Gradient (Sangat DKV)
+                mainBody.classList.remove('bg-gray-900');
+                mainBody.classList.add('bg-mesh');
+                
+                const designCanvas = document.getElementById('designCanvas');
+                const sceneLetter = document.getElementById('scene-letter');
+                const letterCard = document.getElementById('letter-card');
+                const paragraphs = document.querySelectorAll('.paragraph');
+
+                sceneLetter.classList.remove('hidden');
+                sceneLetter.classList.add('flex');
+                
+                // Init Floating Geometric Shapes (Design Elements)
+                setTimeout(() => {
+                    designCanvas.style.opacity = 0.5;
+                    initDesignParticles();
+                }, 100);
+
+                // Munculkan Kartu
+                setTimeout(() => {
+                    letterCard.classList.remove('opacity-0', 'scale-95', 'translate-y-10');
+                    letterCard.classList.add('opacity-100', 'scale-100', 'translate-y-0');
+
+                    paragraphs.forEach((p, index) => {
+                        setTimeout(() => {
+                            p.style.transition = "opacity 1.2s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1)";
+                            p.style.opacity = 1;
+                            p.style.transform = "translateX(0)";
+                        }, 800 + (index * 1200)); 
+                    });
+                }, 400); // Setelah layar berkedip paling putih
+
+            }, 750); // Pertengahan durasi animasi flash
+            
+            // Hapus elemen flash setelah selesai
+            setTimeout(() => {
+                flashOverlay.remove();
+            }, 2000);
+        });
+
+        // --- STREAMING_CHUNK: PARTICLES CANVAS (Geometric Abstract / Design Theme) ---
+        function initDesignParticles() {
+            const canvas = document.getElementById('designCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particlesArray = [];
+            const numberOfParticles = window.innerWidth < 768 ? 20 : 40; 
+            const colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ffffff'];
+            const shapes = ['circle', 'square', 'triangle', 'cross'];
+
+            class ShapeParticle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 15 + 5;
+                    this.speedY = Math.random() * -0.5 - 0.2; // Float up slowly
+                    this.speedX = Math.random() * 0.4 - 0.2;
+                    this.rotation = Math.random() * 360;
+                    this.rotationSpeed = Math.random() * 2 - 1;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.shape = shapes[Math.floor(Math.random() * shapes.length)];
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    this.rotation += this.rotationSpeed;
+                    if (this.y + this.size < 0) {
+                        this.y = canvas.height + this.size;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation * Math.PI / 180);
+                    ctx.globalAlpha = this.opacity;
+                    
+                    if (this.shape === 'circle') {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                        ctx.strokeStyle = this.color;
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    } else if (this.shape === 'square') {
+                        ctx.beginPath();
+                        ctx.rect(-this.size/2, -this.size/2, this.size, this.size);
+                        ctx.strokeStyle = this.color;
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    } else if (this.shape === 'triangle') {
+                        ctx.beginPath();
+                        ctx.moveTo(0, -this.size);
+                        ctx.lineTo(this.size, this.size);
+                        ctx.lineTo(-this.size, this.size);
+                        ctx.closePath();
+                        ctx.fillStyle = this.color;
+                        ctx.fill();
+                    } else if (this.shape === 'cross') {
+                        ctx.beginPath();
+                        ctx.moveTo(-this.size/2, 0);
+                        ctx.lineTo(this.size/2, 0);
+                        ctx.moveTo(0, -this.size/2);
+                        ctx.lineTo(0, this.size/2);
+                        ctx.strokeStyle = this.color;
+                        ctx.lineWidth = 3;
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new ShapeParticle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+    </script>
+</body>
+</html>
